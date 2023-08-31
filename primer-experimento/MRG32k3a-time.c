@@ -13,7 +13,7 @@ double MRG32k3a (void)
    static double s10 = 12345, s11 = 12345, s12 = 123,
                  s20 = 12345, s21 = 12345, s22 = 123;
 
-   /* Initialize seed based on current time */
+   /* Se inicializa la semilla basado en el tiempo de ahora */
    static int seed_initialized = 0;
    if (!seed_initialized) {
        unsigned int seed = (unsigned int)time(NULL);
