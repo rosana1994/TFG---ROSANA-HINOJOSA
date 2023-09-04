@@ -1,40 +1,23 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Read the data from file
-data = pd.read_csv('data.txt', delimiter='\t', header=None)
+data = pd.read_csv('p-values-matrix.txt', delimiter='\t', header=None)
 
-# Define the column names
-test_names = [
-    'smarsa_BirthdaySpacings',
-    'smultin_Multinomial',
-    'sknuth_Gap',
-    'sknuth_SimpPoker',
-    'sknuth_CouponCollector',
-    'sknuth_MaxOft 1',
-    'sknuth_MaxOft 2',
-    'svaria_WeightDistrib',
-    'smarsa_MatrixRank',
-    'sstring_HammingIndep',
-    'swalk_RandomWalk1 1',
-    'swalk_RandomWalk1 2',
-    'swalk_RandomWalk1 3',
-    'swalk_RandomWalk1 4',
-    'swalk_RandomWalk1 5',
-]
-
-# Set column names for the first 15 columns
-data.columns = test_names[:15]
+# Create a pairplot with custom settings
+sns.set(style='ticks')
+custom_kws = {'s': 10, 'color': '#007ACC'}  # Custom point size and color
 
 # Create a grid of subplots
-g = sns.PairGrid(data, corner=True)
+grid = sns.PairGrid(data, diag_sharey=False)
+grid.map_upper(plt.scatter, **custom_kws)  # Scatter plot for upper triangle
+grid.map_diag(sns.histplot, kde_kws={'color': 'red'})  # Histograms on the diagonal
 
-# Map the lower diagonal plots
-g.map_lower(sns.scatterplot, s=2, color='#50A5DA')
-
-# Map the diagonal plots
-g.map_diag(sns.histplot, color='#5093DA')
+# Remove upper-right triangle by setting the axis off
+for i, j in zip(*np.triu_indices_from(grid.axes, 1)):
+    grid.axes[i, j].set_visible(False)
 
 # Adjust the layout and display the plot
 plt.tight_layout()
